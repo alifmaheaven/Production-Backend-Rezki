@@ -7,15 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Uuids;
 
-class Wishes extends Model
+class News extends Model
 {
     use HasFactory;
     use Uuids;
-    protected $table = 'wishes';
+    protected $table = 'news';
+
     protected $fillable = [
-        'message',
+        'tittle',
+        'body',
+        'author',
+        'publish_date',
+        'banner',
+        'id_user',
         'is_deleted',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 
     public static function boot()
     {

@@ -7,16 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Uuids;
 
-class Wishes extends Model
+class CampaignReport extends Model
 {
     use HasFactory;
     use Uuids;
-    protected $table = 'wishes';
+    protected $table = 'campaign_reports';
+
     protected $fillable = [
-        'message',
+        'id_campaign',
+        'document_name',
+        'document_url',
+        'is_exported',
         'is_deleted',
     ];
-
     public static function boot()
     {
         parent::boot();
