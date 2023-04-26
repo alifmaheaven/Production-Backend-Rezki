@@ -14,11 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_actives', function (Blueprint $table) {
-            $table->uuid('id_user_active')->primary();
+            $table->uuid('id')->primary();
             $table->string('phone_number');
             $table->string('email');
             $table->string('id_card');
             $table->string('tax_registration_number');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user__actives');
+        Schema::dropIfExists('user_actives');
     }
 };
