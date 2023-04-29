@@ -16,6 +16,7 @@ use App\Http\Controllers\CampaignReportController;
 use App\Http\Controllers\CampaignReportDetailController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserWishesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -137,7 +138,7 @@ Route::group(['prefix' => 'wishes'], function ($router) {
 // user_wishes
 Route::group(['prefix' => 'user-wishes'], function ($router) {
     Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
-        $router->get('', [UserWishController::class, 'index']);
+        $router->get('', [UserWishesController::class, 'index']);
         $router->get('/{id}', [UserWishController::class, 'show']);
         $router->post('', [UserWishController::class, 'store']);
         $router->put('{id}', [UserWishController::class, 'update']);
