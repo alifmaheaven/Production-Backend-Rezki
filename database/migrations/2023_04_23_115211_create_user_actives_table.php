@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('user_actives', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('phone_number');
-            $table->string('email');
-            $table->string('id_card');
-            $table->string('tax_registration_number');
+            $table->boolean('phone_number')->default('0');
+            $table->boolean('email')->default('0');
+            $table->boolean('id_card')->default('0');
+            $table->boolean('tax_registration_number')->default('0');
             $table->string('updated_by')->default('system');
             $table->string('created_by')->default('system');
             $table->boolean('is_deleted')->default('0');

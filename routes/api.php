@@ -190,6 +190,15 @@ Route::group(['prefix' => 'campaigns'], function ($router) {
     });
 });
 
+// campaigns custom
+Route::group(['prefix' => 'campaigns-custom'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->post('', [CampaignController::class, 'store_custom']);
+        $router->post('{id}', [CampaignController::class, 'update_custom']);
+        $router->patch('status/{id}', [CampaignController::class, 'update_status_custom']);
+    });
+});
+
 // payments
 Route::group(['prefix' => 'payments'], function ($router) {
     Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
