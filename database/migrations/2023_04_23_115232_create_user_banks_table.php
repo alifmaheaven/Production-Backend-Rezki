@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('user_banks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('bank_name');
-            $table->string('account_number');
-            $table->string('account_name');
+            $table->string('bank_name')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('account_name')->nullable();
             $table->string('updated_by')->default('system');
             $table->string('created_by')->default('system');
             $table->boolean('is_deleted')->default('0');

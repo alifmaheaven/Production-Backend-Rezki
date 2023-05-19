@@ -17,9 +17,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->date('date_of_birth');
-            $table->string('full_name');
+            $table->string('full_name')->nullable();;
             $table->enum('gender', ['M', 'F']);
             $table->string('address');
+            $table->string('phone_number')->default('');
             $table->string('id_card');
             $table->string('tax_registration_number');
             $table->string('email')->unique();

@@ -48,10 +48,10 @@ class UserActiveController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'id_card' => 'required|string|max:255',
-            'tax_registration_number' => 'required|string|max:255',
+            'phone_number' => 'required',
+            'email' => 'required',
+            'id_card' => 'required',
+            'tax_registration_number' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -91,10 +91,10 @@ class UserActiveController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'id_card' => 'required|string|max:255',
-            'tax_registration_number' => 'required|string|max:255',
+            'phone_number' => 'required',
+            'email' => 'required',
+            'id_card' => 'required',
+            'tax_registration_number' => 'required',
         ]);
 
         if ($validator->fails()) {

@@ -22,24 +22,24 @@ class DatabaseSeeder extends Seeder
         // Seed user_actives table
         $userActives = [
             [
-                'phone_number' => '555-1234',
-                'email' => 'investor@example.com',
-                'id_card' => '1234567890',
-                'tax_registration_number' => '1234567890',
+                'phone_number' => false,
+                'email' => false,
+                'id_card' => false,
+                'tax_registration_number' => false,
                 'is_deleted' => false
             ],
             [
-                'phone_number' => '555-5678',
-                'email' => 'umkm@example.com',
-                'id_card' => '0987654321',
-                'tax_registration_number' => '0987654321',
+                'phone_number' => false,
+                'email' => false,
+                'id_card' => false,
+                'tax_registration_number' => false,
                 'is_deleted' => false
             ],
             [
-                'phone_number' => '555-9012',
-                'email' => 'reviewer@example.com',
-                'id_card' => '5555555555',
-                'tax_registration_number' => '5555555555',
+                'phone_number' => false,
+                'email' => false,
+                'id_card' => false,
+                'tax_registration_number' => false,
                 'is_deleted' => false
             ],
         ];
@@ -55,24 +55,18 @@ class DatabaseSeeder extends Seeder
                 'account_number' => '1234567890',
                 'account_name' => 'John Doe',
                 'is_deleted' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'bank_name' => 'Chase',
                 'account_number' => '0987654321',
                 'account_name' => 'Jane Smith',
                 'is_deleted' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'bank_name' => 'Wells Fargo',
                 'account_number' => '4567890123',
                 'account_name' => 'Bob Johnson',
                 'is_deleted' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
         ];
 
@@ -88,6 +82,7 @@ class DatabaseSeeder extends Seeder
                 'full_name' => 'John Smith Doe',
                 'gender' => 'M',
                 'address' => '123 Main St, Anytown, USA',
+                'phone_number' => '1234567890',
                 'id_card' => '1234567890',
                 'tax_registration_number' => '1234567890',
                 'email' => 'investor@example.com',
@@ -105,6 +100,7 @@ class DatabaseSeeder extends Seeder
                 'full_name' => 'Jane Ann Smith',
                 'gender' => 'F',
                 'address' => '456 Oak St, Anytown, USA',
+                'phone_number' => '0987654321',
                 'id_card' => '0987654321',
                 'tax_registration_number' => '0987654321',
                 'email' => 'umkm@example.com',
@@ -122,6 +118,7 @@ class DatabaseSeeder extends Seeder
                 'full_name' => 'Robert Johnson',
                 'gender' => 'M',
                 'address' => '789 Elm St, Anytown, USA',
+                'phone_number' => '5555555555',
                 'id_card' => '5555555555',
                 'tax_registration_number' => '5555555555',
                 'email' => 'reviewer@example.com',

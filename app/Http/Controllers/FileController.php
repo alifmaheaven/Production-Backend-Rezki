@@ -18,11 +18,8 @@ class FileController extends Controller
                 'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
-
         $allowedfileExtension = ['pdf', 'jpg', 'png'];
         $files = $request->file('file');
-        $errors = [];
-
         foreach ($files as $file) {
             $extension = $file->getClientOriginalExtension();
             $check = in_array($extension, $allowedfileExtension);
@@ -41,18 +38,8 @@ class FileController extends Controller
         foreach ($files as $file) {
             $path = $file->store('public/images');
             $name = $file->getClientOriginalName();
-
-            //store image file into directory and db
-            // uncomment the code below if you want to save the file to the database
-            /*
-            $save = new Image();
-            $save->title = $name;
-            $save->path = $path;
-            $save->save();
-            */
             $responses[] = [
                 'title' => $name,
-                // 'path' => $path,
                 'url' => Storage::url($path),
             ];
         }

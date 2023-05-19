@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserActive;
+use App\Models\UserBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,11 +50,20 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'bank_name' => 'required|string|max:255',
-            'account_number' => 'required|max:255',
-            'account_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+            'full_name' => '',
+            'gender' => 'required|in:M,F',
+            'address' => 'required|string',
+            'phone_number' => 'required|string',
+            'id_card' => 'required|string',
+            'tax_registration_number' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string',
+            'employment_status' => 'required|string',
+            'authorization_level' => 'required|in:1,2,3',
+            'business_certificate' => '',
         ]);
 
         if ($validator->fails()) {
@@ -63,10 +74,36 @@ class UserController extends Controller
             ], 422);
         }
 
+        $user_active = UserActive::create([
+            'phone_number' => false,
+            'email' => false,
+            'id_card' => false,
+            'tax_registration_number' => false,
+        ]);
+
+        $user_bank = UserBank::create([
+            'bank_name' => '',
+            'bank_account_number' => '',
+            'bank_account_name' => '',
+        ]);
+
+
         $data = User::create([
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
-            'account_name' => $request->account_name,
+            'name' => $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'full_name' => $request->full_name,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+            'id_card' => $request->id_card,
+            'tax_registration_number' => $request->tax_registration_number,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'employment_status' => $request->employment_status,
+            'authorization_level' => $request->authorization_level,
+            'business_certificate' => $request->business_certificate,
+            'id_user_active' => $user_active->id,
+            'id_user_bank' => $user_bank->id,
         ]);
 
         return response()->json([
@@ -90,9 +127,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'bank_name' => 'required|string|max:255',
-            'account_number' => 'required|max:255',
-            'account_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+            'full_name' => '',
+            'gender' => 'required|in:M,F',
+            'address' => 'required|string',
+            'phone_number' => 'required|string',
+            'id_card' => 'required|string',
+            'tax_registration_number' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'employment_status' => 'required|string',
+            'authorization_level' => 'required|in:1,2,3',
+            'business_certificate' => '',
         ]);
 
         if ($validator->fails()) {
@@ -104,9 +150,18 @@ class UserController extends Controller
         }
 
         $data = User::find($id);
-        $data->bank_name = $request->bank_name;
-        $data->account_number = $request->account_number;
-        $data->account_name = $request->account_name;
+        $data->name = $request->name;
+        $data->date_of_birth = $request->date_of_birth;
+        $data->full_name = $request->full_name;
+        $data->gender = $request->gender;
+        $data->address = $request->address;
+        $data->phone_number = $request->phone_number;
+        $data->id_card = $request->id_card;
+        $data->tax_registration_number = $request->tax_registration_number;
+        $data->email = $request->email;
+        $data->employment_status = $request->employment_status;
+        $data->authorization_level = $request->authorization_level;
+        $data->business_certificate = $request->business_certificate;
         $data->save();
 
         return response()->json([
