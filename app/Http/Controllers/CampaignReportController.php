@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CampaignReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CampaignReportController extends Controller
 {
@@ -46,26 +47,7 @@ class CampaignReportController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id_campaign' => 'required|integer',
-            'document_name' => 'required|string|max:255',
-            'document_url' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = CampaignReport::create([
-            'id_campaign' => $request->id_campaign,
-            'document_name' => $request->document_name,
-            'document_url' => $request->document_url,
-        ]);
-
+        $data = CampaignReport::create($request->only((new CampaignReport())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -81,32 +63,13 @@ class CampaignReportController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'id_campaign' => 'required|integer',
-            'document_name' => 'required|string|max:255',
-            'document_url' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = CampaignReport::find($id);
-        $data->id_campaign = $request->id_campaign;
-        $data->document_name = $request->document_name;
-        $data->document_url = $request->document_url;
-        $data->save();
-
+        $data->update($request->only((new CampaignReport())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

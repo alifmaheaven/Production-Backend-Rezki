@@ -47,27 +47,7 @@ class UserBankController extends Controller
 
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'bank_name' => 'required|string|max:255',
-            'account_number' => 'required|max:255',
-            'account_name' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = UserBank::create([
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
-            'account_name' => $request->account_name,
-        ]);
-
+        $data = Userbank::create($request->only((new Userbank())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -88,26 +68,8 @@ class UserBankController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'bank_name' => 'required|string|max:255',
-            'account_number' => 'required|max:255',
-            'account_name' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = UserBank::find($id);
-        $data->bank_name = $request->bank_name;
-        $data->account_number = $request->account_number;
-        $data->account_name = $request->account_name;
-        $data->save();
-
+        $data->update($request->only((new UserBank())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

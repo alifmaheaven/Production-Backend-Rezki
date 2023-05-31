@@ -11,12 +11,24 @@ class CampaignBanner extends Model
 {
     use HasFactory;
     use Uuids;
+
     protected $table = 'campaign_banners';
     protected $fillable = [
-        'name',
-        'url',
+        'id_banner',
+        'id_campaign',
         'is_deleted',
     ];
+
+    public function banner()
+    {
+        return $this->belongsTo(Banners::class, 'id_banner');
+    }
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaigns::class, 'id_campaign');
+    }
+
     public static function boot()
     {
        parent::boot();

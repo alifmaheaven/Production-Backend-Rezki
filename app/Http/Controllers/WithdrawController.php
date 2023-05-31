@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class WithdrawController extends Controller
 {
@@ -46,28 +47,7 @@ class WithdrawController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id_user' => 'required|integer',
-            'id_campaign_report_detail' => 'required|integer',
-            'amount' => 'required|integer',
-            'date' => 'required|date',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = Withdraw::create([
-            'id_user' => $request->id_user,
-            'id_campaign_report_detail' => $request->id_campaign_report_detail,
-            'amount' => $request->amount,
-            'date' => $request->date,
-        ]);
-
+        $data = Withdraw::create($request->only((new Withdraw())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -83,34 +63,13 @@ class WithdrawController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'id_user' => 'required|integer',
-            'id_campaign_report_detail' => 'required|integer',
-            'amount' => 'required|integer',
-            'date' => 'required|date',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = Withdraw::find($id);
-        $data->id_user = $request->id_user;
-        $data->id_campaign_report_detail = $request->id_campaign_report_detail;
-        $data->amount = $request->amount;
-        $data->date = $request->date;
-        $data->save();
-
+        $data->update($request->only((new Withdraw())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

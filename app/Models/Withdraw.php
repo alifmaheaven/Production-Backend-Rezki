@@ -11,24 +11,19 @@ class Withdraw extends Model
 {
     use HasFactory;
     use Uuids;
-    protected $table = 'withdraws';
 
+    protected $table = 'withdraws';
     protected $fillable = [
         'id_user',
-        'id_campaign_report_detail',
         'amount',
-        'date',
+        'registrasion_fee',
+        'service_fee',
         'is_deleted',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
-
-    public function campaign_report_detail()
-    {
-        return $this->belongsTo(CampaignReportDetail::class, 'id_campaign_report_detail', 'id');
+        return $this->belongsTo(Users::class, 'id_user');
     }
 
     public static function boot()
