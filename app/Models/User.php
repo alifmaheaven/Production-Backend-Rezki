@@ -18,9 +18,13 @@ class User extends Authenticatable implements JWTSubject
     protected $table = 'users';
 
     protected $fillable = [
-        'name',
-        'date_of_birth',
+        'id_user_active',
+        'id_user_bank',
+        'id_user_business',
+        'id_user_heir',
+        'id_user_image',
         'full_name',
+        'date_of_birth',
         'gender',
         'address',
         'id_card',
@@ -28,10 +32,9 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'employment_status',
-        'id_user_active',
-        'id_user_bank',
         'authorization_level',
-        'business_certificate',
+        'phone_number',
+        'marital_status',
         'is_deleted',
     ];
     /**
@@ -65,12 +68,27 @@ class User extends Authenticatable implements JWTSubject
 
     public function user_active()
     {
-        return $this->belongsTo(UserActive::class, 'id_user_active', 'id');
+        return $this->belongsTo(UserActive::class, 'id_user_active');
     }
 
     public function user_bank()
     {
-        return $this->belongsTo(UserBank::class, 'id_user_bank', 'id');
+        return $this->belongsTo(UserBank::class, 'id_user_bank');
+    }
+
+    public function user_business()
+    {
+        return $this->belongsTo(UserBusiness::class, 'id_user_business');
+    }
+
+    public function user_heir()
+    {
+        return $this->belongsTo(UserHeir::class, 'id_user_heir');
+    }
+
+    public function user_image()
+    {
+        return $this->belongsTo(UserImage::class, 'id_user_image');
     }
 
     public static function boot()

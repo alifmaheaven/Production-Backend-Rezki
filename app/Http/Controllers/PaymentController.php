@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -46,30 +47,7 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'payment_method' => 'required|string|max:255',
-            'service_fee' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'id_user' => 'required',
-            'id_campaign' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = Payment::create([
-            'payment_method' => $request->payment_method,
-            'service_fee' => $request->service_fee,
-            'status' => $request->status,
-            'id_user' => $request->id_user,
-            'id_campaign' => $request->id_campaign,
-        ]);
-
+        $data = Payment::create($request->only((new Payment())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -85,36 +63,13 @@ class PaymentController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'payment_method' => 'required|string|max:255',
-            'service_fee' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'id_user' => 'required',
-            'id_campaign' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = Payment::find($id);
-        $data->payment_method = $request->payment_method;
-        $data->service_fee = $request->service_fee;
-        $data->status = $request->status;
-        $data->id_user = $request->id_user;
-        $data->id_campaign = $request->id_campaign;
-        $data->save();
-
+        $data->update($request->only((new Payment())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

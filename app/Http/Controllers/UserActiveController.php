@@ -47,27 +47,22 @@ class UserActiveController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
-            'email' => 'required',
-            'id_card' => 'required',
-            'tax_registration_number' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'phone_number' => 'required',
+        //     'email' => 'required',
+        //     'id_card' => 'required',
+        //     'tax_registration_number' => 'required',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $validator->errors(),
+        //         'server_time' => (int) round(microtime(true) * 1000),
+        //     ], 422);
+        // }
 
-        $data = UserActive::create([
-            'phone_number' => $request->phone_number,
-            'email' => $request->email,
-            'id_card' => $request->id_card,
-            'tax_registration_number' => $request->tax_registration_number,
-        ]);
+        $data = UserActive::create($request->only((new UserActive())->getFillable()));
 
         return response()->json([
             'status' => 'success',
@@ -90,27 +85,23 @@ class UserActiveController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
-            'email' => 'required',
-            'id_card' => 'required',
-            'tax_registration_number' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'phone_number' => 'required',
+        //     'email' => 'required',
+        //     'id_card' => 'required',
+        //     'tax_registration_number' => 'required',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $validator->errors(),
+        //         'server_time' => (int) round(microtime(true) * 1000),
+        //     ], 422);
+        // }
 
         $data = UserActive::find($id);
-        $data->phone_number = $request->phone_number;
-        $data->email = $request->email;
-        $data->id_card = $request->id_card;
-        $data->tax_registration_number = $request->tax_registration_number;
-        $data->save();
+        $data->update($request->only((new UserActive())->getFillable()));
 
         return response()->json([
             'status' => 'success',

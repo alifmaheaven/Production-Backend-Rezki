@@ -11,25 +11,30 @@ class Payment extends Model
 {
     use HasFactory;
     use Uuids;
-    protected $table = 'payments';
 
+    protected $table = 'payments';
     protected $fillable = [
-        'payment_method',
-        'service_fee',
-        'status',
         'id_user',
         'id_campaign',
+        'id_receipt',
+        'amount',
+        'status',
         'is_deleted',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id');
+        return $this->belongsTo(Users::class, 'id_user');
     }
 
     public function campaign()
     {
-        return $this->belongsTo(Campaign::class, 'id_campaign', 'id');
+        return $this->belongsTo(Campaigns::class, 'id_campaign');
+    }
+
+    public function receipt()
+    {
+        return $this->belongsTo(Receipts::class, 'id_receipt');
     }
 
     public static function boot()

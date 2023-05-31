@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CampaignBanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CampaignBannerController extends Controller
 {
@@ -46,29 +47,12 @@ class CampaignBannerController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'url' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = CampaignBanner::create([
-            'name' => $request->name,
-            'url' => $request->url,
-        ]);
-
+        $data = CampaignBanner::create($request->only((new CampaignBanner())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
-            'server_time' => (int) round(microtime(true) * 1000),
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -79,30 +63,13 @@ class CampaignBannerController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'url' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = CampaignBanner::find($id);
-        $data->name = $request->name;
-        $data->url = $request->url;
-        $data->save();
-
+        $data->update($request->only((new CampaignBanner())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

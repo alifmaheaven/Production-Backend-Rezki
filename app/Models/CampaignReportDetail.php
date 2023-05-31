@@ -11,20 +11,20 @@ class CampaignReportDetail extends Model
 {
     use HasFactory;
     use Uuids;
-    protected $table = 'campaign_report_details';
 
+    protected $table = 'campaign_report_detail';
     protected $fillable = [
         'id_campaign_report',
-        'date_time',
         'amount',
         'description',
         'evidence',
+        'type',
         'is_deleted',
     ];
 
     public function campaign_report()
     {
-        return $this->belongsTo(CampaignReport::class, 'id_campaign_report', 'id');
+        return $this->belongsTo(CampaignReport::class, 'id_campaign_report');
     }
 
     public static function boot()

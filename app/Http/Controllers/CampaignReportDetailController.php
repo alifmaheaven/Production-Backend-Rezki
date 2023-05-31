@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CampaignReportDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CampaignReportDetailController extends Controller
 {
@@ -46,30 +47,7 @@ class CampaignReportDetailController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id_campaign_report' => 'required|integer',
-            'date_time' => 'required|date',
-            'amount' => 'required|integer',
-            'description' => 'required|string|max:255',
-            'evidence' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
-        $data = CampaignReportDetail::create([
-            'id_campaign_report' => $request->id_campaign_report,
-            'date_time' => $request->date_time,
-            'amount' => $request->amount,
-            'description' => $request->description,
-            'evidence' => $request->evidence,
-        ]);
-
+        $data = CampaignReportDetail::create($request->only((new CampaignReportDetail())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -85,36 +63,13 @@ class CampaignReportDetailController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'id_campaign_report' => 'required|integer',
-            'date_time' => 'required|date',
-            'amount' => 'required|integer',
-            'description' => 'required|string|max:255',
-            'evidence' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-                'server_time' => (int) round(microtime(true) * 1000),
-            ], 422);
-        }
-
         $data = CampaignReportDetail::find($id);
-        $data->id_campaign_report = $request->id_campaign_report;
-        $data->date_time = $request->date_time;
-        $data->amount = $request->amount;
-        $data->description = $request->description;
-        $data->evidence = $request->evidence;
-        $data->save();
-
+        $data->update($request->only((new CampaignReportDetail())->getFillable()));
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

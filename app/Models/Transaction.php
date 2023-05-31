@@ -10,41 +10,51 @@ use App\Traits\Uuids;
 class Transaction extends Model
 {
     use HasFactory;
-    protected $table = 'transactions';
     use Uuids;
 
+    protected $table = 'transaction';
     protected $fillable = [
-        'amount',
-        'id_user',
         'id_campaign',
+        'id_user',
+        'id_receipt',
+        'investor_amount',
         'sukuk',
-        'administration_fee',
+        'service_fee',
+        'status',
+        'profit',
         'is_deleted',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
-
     public function campaign()
     {
-        return $this->belongsTo(Campaign::class, 'id_campaign', 'id');
+        return $this->belongsTo(Campaigns::class, 'id_campaign');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'id_user');
+    }
+
+    public function receipt()
+    {
+        return $this->belongsTo(Receipts::class, 'id_receipt');
     }
 
     public static function boot()
     {
-        parent::boot();
-        static::creating(function ($model) {
-            $user = Auth::user();
-            $model->created_by = isset($user->email) ? $user->email : 'system';
-            $model->updated_by = isset($user->email) ? $user->email : 'system';
-            $model->id = (string) \Illuminate\Support\Str::uuid();
-        });
-        static::updating(function ($model) {
-            $user = Auth::user();
-            $model->updated_by = isset($user->email) ? $user->email : 'system';
-            $model->version = $model->version + 1;
-        });
-    }
+       parent::boot();
+       static::creating(function($model)
+       {
+           $user = Auth::user();
+           $model->created_by = isset($user->email) ? $user->email : 'system';
+           $model->updated_by = isset($user->email) ? $user->email : 'system';
+           $model->id = (string) \Illuminate\Support\Str::uuid();
+       });
+       static::updating(function($model)
+       {
+           $user = Auth::user();
+           $model->updated_by = isset($user->email) ? $user->email : 'system';
+           $model->version = $model->version + 1;
+       });
+   }
 }
