@@ -12,7 +12,7 @@ class UserHeir extends Model
     use HasFactory;
     use Uuids;
 
-    protected $table = 'user_heir';
+    protected $table = 'user_heirs';
     protected $fillable = [
         'name',
         'relationship',

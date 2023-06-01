@@ -12,7 +12,7 @@ class Transaction extends Model
     use HasFactory;
     use Uuids;
 
-    protected $table = 'transaction';
+    protected $table = 'transactions';
     protected $fillable = [
         'id_campaign',
         'id_user',

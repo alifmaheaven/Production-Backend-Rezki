@@ -12,7 +12,7 @@ class CampaignReportDetail extends Model
     use HasFactory;
     use Uuids;
 
-    protected $table = 'campaign_report_detail';
+    protected $table = 'campaign_report_details';
     protected $fillable = [
         'id_campaign_report',
         'amount',

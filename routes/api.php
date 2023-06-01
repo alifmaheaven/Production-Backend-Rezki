@@ -47,12 +47,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout')->middleware('auth');
-    Route::post('refresh', 'refresh')->middleware('auth');
-});
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [UserController::class, 'store']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('refresh', [AuthController::class, 'refresh'])->middleware('auth');
 
 /*
 |---------------------------------------------------------------------------|
@@ -97,8 +95,15 @@ Route::group(['prefix' => 'user'], function ($router) {
         $router->get('', [UserController::class, 'index']);
         $router->get('/{id}', [UserController::class, 'show']);
         $router->post('', [UserController::class, 'store']);
-        $router->put('{id}', [UserController::class, 'update']);
+        $router->post('{id}', [UserController::class, 'update']);
         $router->delete('{id}', [UserController::class, 'destroy']);
+    });
+});
+
+// user custom
+Route::group(['prefix' => 'user-custom'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->post('change-password/{id}', [UserController::class, 'change_password_user']);
     });
 });
 
@@ -115,13 +120,13 @@ Route::group(['prefix' => 'user-banks'], function ($router) {
 
 // user_actives
 Route::group(['prefix' => 'user-actives'], function ($router) {
-    // Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
         $router->get('', [UserActiveController::class, 'index']);
         $router->get('/{id}', [UserActiveController::class, 'show']);
         $router->post('', [UserActiveController::class, 'store']);
         $router->put('{id}', [UserActiveController::class, 'update']);
         $router->delete('{id}', [UserActiveController::class, 'destroy']);
-    // });
+    });
 });
 
 // user_bussiness
