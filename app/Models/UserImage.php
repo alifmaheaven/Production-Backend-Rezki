@@ -12,7 +12,7 @@ class UserImage extends Model
     use HasFactory;
     use Uuids;
 
-    protected $table = 'user_image';
+    protected $table = 'user_images';
     protected $fillable = [
         'id_card_url',
         'id_card_with_face_url',
