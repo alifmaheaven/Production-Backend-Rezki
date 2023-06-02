@@ -138,9 +138,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $data = User::find($id);
+        $data = new User();
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
+        $data = $data->find($id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',

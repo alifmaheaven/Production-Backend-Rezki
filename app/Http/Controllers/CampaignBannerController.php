@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\CampaignBanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignBannerController extends Controller
 {
@@ -47,7 +49,30 @@ class CampaignBannerController extends Controller
 
     public function store(Request $request)
     {
-        $data = CampaignBanner::create($request->only((new CampaignBanner())->getFillable()));
+        $id_campaign = $request->id_campaign;
+        $data = [];
+
+         // create banner
+         if ($request->file('file_banner')) {
+            $array_banner_name = $request->banner_name;
+            $array_file_banner = $request->file('file_banner');
+            for ($i = 0; $i < count($array_banner_name); $i++) {
+                $banner_name = $array_banner_name[$i];
+                $file_banner = $array_file_banner[$i];
+                $path_of_file_banner = $file_banner->store('public/banner');
+                $banner_url = Storage::url($path_of_file_banner);
+                $field_banner['name'] = $banner_name;
+                $field_banner['url'] = $banner_url;
+                $banner = Banner::create($field_banner);
+
+                // create campaign_banner
+                $field_campaign_banner = [
+                    'id_campaign' => $id_campaign,
+                    'id_banner' => $banner->id,
+                ];
+                $data[$i] = CampaignBanner::create($field_campaign_banner);
+            }
+        }
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -56,9 +81,19 @@ class CampaignBannerController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $data = CampaignBanner::find($id);
+        $data = new CampaignBanner();
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
+        $data = $data->find($id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',
