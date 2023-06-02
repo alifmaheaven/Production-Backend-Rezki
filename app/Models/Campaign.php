@@ -32,13 +32,21 @@ class Campaign extends Model
         'profit_share',
         'sold_sukuk',
         'is_deleted',
-        'version',
     ];
 
     public function user()
     {
         return $this->belongsTo(Users::class, 'id_user');
     }
+
+    public function campaign_banners()
+    {
+        return $this->hasMany(CampaignBanner::class, 'id_campaign')->select('campaign_banners.*', 'banners.url', 'banners.name')
+            ->join('banners', 'campaign_banners.id_banner', '=', 'banners.id')
+            ->where('campaign_banners.is_deleted', false)
+            ->where('banners.is_deleted', false);
+    }
+
 
     public static function boot()
     {

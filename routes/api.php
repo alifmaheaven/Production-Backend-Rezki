@@ -113,7 +113,7 @@ Route::group(['prefix' => 'user-banks'], function ($router) {
         $router->get('', [UserBankController::class, 'index']);
         $router->get('/{id}', [UserBankController::class, 'show']);
         $router->post('', [UserBankController::class, 'store']);
-        $router->put('{id}', [UserBankController::class, 'update']);
+        $router->post('{id}', [UserBankController::class, 'update']);
         $router->delete('{id}', [UserBankController::class, 'destroy']);
     });
 });
@@ -124,7 +124,7 @@ Route::group(['prefix' => 'user-actives'], function ($router) {
         $router->get('', [UserActiveController::class, 'index']);
         $router->get('/{id}', [UserActiveController::class, 'show']);
         $router->post('', [UserActiveController::class, 'store']);
-        $router->put('{id}', [UserActiveController::class, 'update']);
+        $router->post('{id}', [UserActiveController::class, 'update']);
         $router->delete('{id}', [UserActiveController::class, 'destroy']);
     });
 });
@@ -135,7 +135,7 @@ Route::group(['prefix' => 'user-bussiness'], function ($router) {
         $router->get('', [UserBusinessController::class, 'index']);
         $router->get('/{id}', [UserBusinessController::class, 'show']);
         $router->post('', [UserBusinessController::class, 'store']);
-        $router->put('{id}', [UserBusinessController::class, 'update']);
+        $router->post('{id}', [UserBusinessController::class, 'update']);
         $router->delete('{id}', [UserBusinessController::class, 'destroy']);
     });
 });
@@ -146,7 +146,7 @@ Route::group(['prefix' => 'user-heir'], function ($router) {
         $router->get('', [UserHeirController::class, 'index']);
         $router->get('/{id}', [UserHeirController::class, 'show']);
         $router->post('', [UserHeirController::class, 'store']);
-        $router->put('{id}', [UserHeirController::class, 'update']);
+        $router->post('{id}', [UserHeirController::class, 'update']);
         $router->delete('{id}', [UserHeirController::class, 'destroy']);
     });
 });
@@ -157,7 +157,7 @@ Route::group(['prefix' => 'user-image'], function ($router) {
         $router->get('', [UserImageController::class, 'index']);
         $router->get('/{id}', [UserImageController::class, 'show']);
         $router->post('', [UserImageController::class, 'store']);
-        $router->put('{id}', [UserImageController::class, 'update']);
+        $router->post('{id}', [UserImageController::class, 'update']);
         $router->delete('{id}', [UserImageController::class, 'destroy']);
     });
 });
@@ -168,7 +168,7 @@ Route::group(['prefix' => 'banner'], function ($router) {
         $router->get('', [BannerController::class, 'index']);
         $router->get('/{id}', [BannerController::class, 'show']);
         $router->post('', [BannerController::class, 'store']);
-        $router->put('{id}', [BannerController::class, 'update']);
+        $router->post('{id}', [BannerController::class, 'update']);
         $router->delete('{id}', [BannerController::class, 'destroy']);
     });
 });
@@ -179,7 +179,7 @@ Route::group(['prefix' => 'receipt'], function ($router) {
         $router->get('', [ReceiptController::class, 'index']);
         $router->get('/{id}', [ReceiptController::class, 'show']);
         $router->post('', [ReceiptController::class, 'store']);
-        $router->put('{id}', [ReceiptController::class, 'update']);
+        $router->post('{id}', [ReceiptController::class, 'update']);
         $router->delete('{id}', [ReceiptController::class, 'destroy']);
     });
 });
@@ -190,7 +190,7 @@ Route::group(['prefix' => 'withdraw'], function ($router) {
         $router->get('', [WithdrawController::class, 'index']);
         $router->get('/{id}', [WithdrawController::class, 'show']);
         $router->post('', [WithdrawController::class, 'store']);
-        $router->put('{id}', [WithdrawController::class, 'update']);
+        $router->post('{id}', [WithdrawController::class, 'update']);
         $router->delete('{id}', [WithdrawController::class, 'destroy']);
     });
 });
@@ -201,7 +201,7 @@ Route::group(['prefix' => 'campaign'], function ($router) {
         $router->get('', [CampaignController::class, 'index']);
         $router->get('/{id}', [CampaignController::class, 'show']);
         $router->post('', [CampaignController::class, 'store']);
-        $router->put('{id}', [CampaignController::class, 'update']);
+        $router->post('{id}', [CampaignController::class, 'update']);
         $router->delete('{id}', [CampaignController::class, 'destroy']);
     });
 });
@@ -212,7 +212,7 @@ Route::group(['prefix' => 'transaction'], function ($router) {
         $router->get('', [TransactionController::class, 'index']);
         $router->get('/{id}', [TransactionController::class, 'show']);
         $router->post('', [TransactionController::class, 'store']);
-        $router->put('{id}', [TransactionController::class, 'update']);
+        $router->post('{id}', [TransactionController::class, 'update']);
         $router->delete('{id}', [TransactionController::class, 'destroy']);
     });
 });
@@ -223,7 +223,7 @@ Route::group(['prefix' => 'campaign-report'], function ($router) {
         $router->get('', [CampaignReportController::class, 'index']);
         $router->get('/{id}', [CampaignReportController::class, 'show']);
         $router->post('', [CampaignReportController::class, 'store']);
-        $router->put('{id}', [CampaignReportController::class, 'update']);
+        $router->post('{id}', [CampaignReportController::class, 'update']);
         $router->delete('{id}', [CampaignReportController::class, 'destroy']);
     });
 });
@@ -234,7 +234,7 @@ Route::group(['prefix' => 'campaign-report-detail'], function ($router) {
         $router->get('', [CampaignReportDetailController::class, 'index']);
         $router->get('/{id}', [CampaignReportDetailController::class, 'show']);
         $router->post('', [CampaignReportDetailController::class, 'store']);
-        $router->put('{id}', [CampaignReportDetailController::class, 'update']);
+        $router->post('{id}', [CampaignReportDetailController::class, 'update']);
         $router->delete('{id}', [CampaignReportDetailController::class, 'destroy']);
     });
 });
@@ -245,7 +245,7 @@ Route::group(['prefix' => 'campaign-banner'], function ($router) {
         $router->get('', [CampaignBannerController::class, 'index']);
         $router->get('/{id}', [CampaignBannerController::class, 'show']);
         $router->post('', [CampaignBannerController::class, 'store']);
-        $router->put('{id}', [CampaignBannerController::class, 'update']);
+        $router->post('{id}', [CampaignBannerController::class, 'update']);
         $router->delete('{id}', [CampaignBannerController::class, 'destroy']);
     });
 });
@@ -256,7 +256,7 @@ Route::group(['prefix' => 'payment'], function ($router) {
         $router->get('', [PaymentController::class, 'index']);
         $router->get('/{id}', [PaymentController::class, 'show']);
         $router->post('', [PaymentController::class, 'store']);
-        $router->put('{id}', [PaymentController::class, 'update']);
+        $router->post('{id}', [PaymentController::class, 'update']);
         $router->delete('{id}', [PaymentController::class, 'destroy']);
     });
 });

@@ -72,14 +72,23 @@ class UserActiveController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $data = UserActive::find($id);
+        $data = new UserActive();
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
+        $data = $data->find($id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 

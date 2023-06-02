@@ -21,12 +21,12 @@ class CampaignBanner extends Model
 
     public function banner()
     {
-        return $this->belongsTo(Banners::class, 'id_banner');
+        return $this->belongsTo(Banner::class, 'id_banner');
     }
 
     public function campaign()
     {
-        return $this->belongsTo(Campaigns::class, 'id_campaign');
+        return $this->belongsTo(Campaign::class, 'id_campaign');
     }
 
     public static function boot()

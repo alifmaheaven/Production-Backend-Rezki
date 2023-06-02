@@ -56,9 +56,19 @@ class UserImageController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $data = UserImage::find($id);
+        $data = new UserImage();
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
+        $data = $data->find($id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',

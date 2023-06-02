@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Campaign;
+use App\Models\CampaignBanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller
 {
@@ -47,7 +50,39 @@ class CampaignController extends Controller
 
     public function store(Request $request)
     {
-        $data = Campaign::create($request->only((new Campaign())->getFillable()));
+        // create campaign
+        $field_campaign = $request->only((new Campaign())->getFillable());
+        $field_campaign['id_user'] = $request->user()->id;
+        if ($request->file('file_prospektus')) {
+            $file_prospektus = $request->file('file_prospektus');
+            $path_of_file_prospektus = $file_prospektus->store('public/prospektus');
+            $prospektus_url = Storage::url($path_of_file_prospektus);
+            $field_user_image['prospektus_url'] = $prospektus_url;
+        }
+        $data = Campaign::create($field_campaign);
+
+        // create banner
+        if ($request->file('file_banner')) {
+            $array_banner_name = $request->banner_name;
+            $array_file_banner = $request->file('file_banner');
+            for ($i = 0; $i < count($array_banner_name); $i++) {
+                $banner_name = $array_banner_name[$i];
+                $file_banner = $array_file_banner[$i];
+                $path_of_file_banner = $file_banner->store('public/banner');
+                $banner_url = Storage::url($path_of_file_banner);
+                $field_banner['name'] = $banner_name;
+                $field_banner['url'] = $banner_url;
+                $banner = Banner::create($field_banner);
+
+                // create campaign_banner
+                $field_campaign_banner = [
+                    'id_campaign' => $data->id,
+                    'id_banner' => $banner->id,
+                ];
+                $campaign_banner = CampaignBanner::create($field_campaign_banner);
+            }
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -56,9 +91,19 @@ class CampaignController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $data = Campaign::find($id);
+        $data = new Campaign();
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
+        $data = $data->find($id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',
@@ -69,7 +114,16 @@ class CampaignController extends Controller
     public function update(Request $request, $id)
     {
         $data = Campaign::find($id);
-        $data->update($request->only((new Campaign())->getFillable()));
+        $field_campaign['id_user'] = null;
+        unset($field_campaign['id_user']);
+        if ($request->file('file_prospektus')) {
+            $file_prospektus = $request->file('file_prospektus');
+            $path_of_file_prospektus = $file_prospektus->store('public/prospektus');
+            $prospektus_url = Storage::url($path_of_file_prospektus);
+            $field_user_image['prospektus_url'] = $prospektus_url;
+        }
+        $data->update($field_campaign);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
@@ -77,7 +131,6 @@ class CampaignController extends Controller
             'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
-
 
     public function destroy($id)
     {
