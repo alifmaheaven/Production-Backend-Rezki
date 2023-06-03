@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -47,7 +49,18 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        $data = Payment::create($request->only((new Payment())->getFillable()));
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->hasFile('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $receipts = Receipt::create($field_receipts);
+        $field_payment = $request->only((new Payment())->getFillable());
+        $field_payment['id_user'] = $request->user()->id;
+        $field_payment['id_receipt'] = $receipts->id;
+        $data = Payment::create($field_payment);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +92,22 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $data = Payment::find($id);
-        $data->update($request->only((new Payment())->getFillable()));
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->hasFile('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $field_payment = $request->only((new Payment())->getFillable());
+        $field_payment['id_campaign'] = null;
+        $field_payment['id_user'] = null;
+        $field_payment['id_receipt'] = null;
+        unset($field_payment['id_campaign']);
+        unset($field_payment['id_user']);
+        unset($field_payment['id_receipt']);
+        $data->receipt->update($field_receipts);
+        $data->update($field_payment);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger('investor_amount')->nullable();
             $table->integer('sukuk')->nullable();
             $table->bigInteger('service_fee')->nullable();
-            $table->string('status')->nullable();
+            $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'ACTIVE', 'ACHIEVED', 'PROCESSED', 'RUNNING', 'DONE'])->default('WAITING_VERIFICATION');
             $table->bigInteger('profit')->nullable();
             $table->string('created_by')->default('system');
             $table->string('updated_by')->default('system');

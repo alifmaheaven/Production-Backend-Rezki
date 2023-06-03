@@ -23,7 +23,7 @@ class CampaignReport extends Model
 
     public function campaign()
     {
-        return $this->belongsTo(Campaigns::class, 'id_campaign');
+        return $this->belongsTo(Campaign::class, 'id_campaign');
     }
 
     public static function boot()
