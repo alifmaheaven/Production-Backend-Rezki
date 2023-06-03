@@ -6,6 +6,7 @@ use App\Models\CampaignReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignReportController extends Controller
 {
@@ -47,7 +48,14 @@ class CampaignReportController extends Controller
 
     public function store(Request $request)
     {
-        $data = CampaignReport::create($request->only((new CampaignReport())->getFillable()));
+        $field_campaign_reports = $request->only((new CampaignReport())->getFillable());
+        if ($request->file('file_document')) {
+            $file_document = $request->file('file_document');
+            $path_of_file_document = $file_document->store('public/document');
+            $document_url = Storage::url($path_of_file_document);
+            $field_campaign_reports['document_url'] = $document_url;
+        }
+        $data = CampaignReport::create($field_campaign_reports);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +87,14 @@ class CampaignReportController extends Controller
     public function update(Request $request, $id)
     {
         $data = CampaignReport::find($id);
-        $data->update($request->only((new CampaignReport())->getFillable()));
+        $field_campaign_reports = $request->only((new CampaignReport())->getFillable());
+        if ($request->file('file_document')) {
+            $file_document = $request->file('file_document');
+            $path_of_file_document = $file_document->store('public/document');
+            $document_url = Storage::url($path_of_file_document);
+            $field_campaign_reports['document_url'] = $document_url;
+        }
+        $data->update($field_campaign_reports);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
