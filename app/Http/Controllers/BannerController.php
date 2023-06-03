@@ -6,6 +6,7 @@ use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
@@ -47,7 +48,14 @@ class BannerController extends Controller
 
     public function store(Request $request)
     {
-        $data = Banner::create($request->only((new Banner())->getFillable()));
+        $field_banners = $request->only((new Banner())->getFillable());
+        if ($request->file('file_banner')) {
+            $file_banner = $request->file('file_banner');
+            $path_of_file_banner = $file_banner->store('public/banner');
+            $banner_url = Storage::url($path_of_file_banner);
+            $field_banners['url'] = $banner_url;
+        }
+        $data = Banner::create($field_banners);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +87,14 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
         $data = Banner::find($id);
-        $data->update($request->only((new Banner())->getFillable()));
+        $field_banners = $request->only((new Banner())->getFillable());
+        if ($request->file('file_banner')) {
+            $file_banner = $request->file('file_banner');
+            $path_of_file_banner = $file_banner->store('public/banner');
+            $banner_url = Storage::url($path_of_file_banner);
+            $field_banners['url'] = $banner_url;
+        }
+        $data->update($field_banners);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
