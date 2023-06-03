@@ -6,6 +6,7 @@ use App\Models\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ReceiptController extends Controller
 {
@@ -47,7 +48,14 @@ class ReceiptController extends Controller
 
     public function store(Request $request)
     {
-        $data = Receipt::create($request->only((new Receipt())->getFillable()));
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->file('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $data = Receipt::create($field_receipts);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +87,14 @@ class ReceiptController extends Controller
     public function update(Request $request, $id)
     {
         $data = Receipt::find($id);
-        $data->update($request->only((new Receipt())->getFillable()));
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->file('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $data->update($field_receipts);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

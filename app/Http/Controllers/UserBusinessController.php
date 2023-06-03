@@ -6,6 +6,7 @@ use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserBusinessController extends Controller
 {
@@ -58,7 +59,14 @@ class UserBusinessController extends Controller
 
     public function show(Request $request, $id)
     {
-        $data = new UserBusiness();
+        $field_user_business = $request->only((new UserBusiness())->getFillable());
+        if ($request->file('file_certificate')) {
+            $file_certificate = $request->file('file_certificate');
+            $path_of_file_certificate = $file_certificate->store('public/certificate');
+            $certificate_url = Storage::url($path_of_file_certificate);
+            $field_user_business['certificate_url'] = $certificate_url;
+        }
+        $data = new UserBusiness($field_user_business);
         // Include related data
         if ($request->query('include')) {
             $includes = $request->query('include');
@@ -79,7 +87,14 @@ class UserBusinessController extends Controller
     public function update(Request $request, $id)
     {
         $data = UserBusiness::find($id);
-        $data->update($request->only((new UserBusiness())->getFillable()));
+        $field_user_business = $request->only((new UserBusiness())->getFillable());
+        if ($request->file('file_certificate')) {
+            $file_certificate = $request->file('file_certificate');
+            $path_of_file_certificate = $file_certificate->store('public/certificate');
+            $certificate_url = Storage::url($path_of_file_certificate);
+            $field_user_business['certificate_url'] = $certificate_url;
+        }
+        $data->update($field_user_business);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

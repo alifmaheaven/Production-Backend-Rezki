@@ -6,6 +6,7 @@ use App\Models\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserImageController extends Controller
 {
@@ -47,7 +48,26 @@ class UserImageController extends Controller
 
     public function store(Request $request)
     {
-        $data = UserImage::create($request->only((new UserImage())->getFillable()));
+        $field_user_image = $request->only((new UserImage)->getFillable());
+        if ($request->file('file_id_card')) {
+            $file_id_card = $request->file('file_id_card');
+            $path_of_file_id_card = $file_id_card->store('public/id_card');
+            $id_card_url = Storage::url($path_of_file_id_card);
+            $field_user_image['id_card_url'] = $id_card_url;
+        }
+        if ($request->file('file_id_card_with_face')) {
+            $file_id_card_with_face = $request->file('file_id_card_with_face');
+            $path_of_file_id_card_with_face = $file_id_card_with_face->store('public/id_card_with_face');
+            $id_card_with_face_url = Storage::url($path_of_file_id_card_with_face);
+            $field_user_image['id_card_with_face_url'] = $id_card_with_face_url;
+        }
+        if ($request->file('file_selfie')) {
+            $file_selfie = $request->file('file_selfie');
+            $path_of_file_selfie = $file_selfie->store('public/selfie');
+            $selfie_url = Storage::url($path_of_file_selfie);
+            $field_user_image['selfie_url'] = $selfie_url;
+        }
+        $data = UserImage::create($field_user_image);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +99,26 @@ class UserImageController extends Controller
     public function update(Request $request, $id)
     {
         $data = UserImage::find($id);
-        $data->update($request->only((new UserImage())->getFillable()));
+        $field_user_image = $request->only((new UserImage)->getFillable());
+        if ($request->file('file_id_card')) {
+            $file_id_card = $request->file('file_id_card');
+            $path_of_file_id_card = $file_id_card->store('public/id_card');
+            $id_card_url = Storage::url($path_of_file_id_card);
+            $field_user_image['id_card_url'] = $id_card_url;
+        }
+        if ($request->file('file_id_card_with_face')) {
+            $file_id_card_with_face = $request->file('file_id_card_with_face');
+            $path_of_file_id_card_with_face = $file_id_card_with_face->store('public/id_card_with_face');
+            $id_card_with_face_url = Storage::url($path_of_file_id_card_with_face);
+            $field_user_image['id_card_with_face_url'] = $id_card_with_face_url;
+        }
+        if ($request->file('file_selfie')) {
+            $file_selfie = $request->file('file_selfie');
+            $path_of_file_selfie = $file_selfie->store('public/selfie');
+            $selfie_url = Storage::url($path_of_file_selfie);
+            $field_user_image['selfie_url'] = $selfie_url;
+        }
+        $data->update($field_user_image);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
