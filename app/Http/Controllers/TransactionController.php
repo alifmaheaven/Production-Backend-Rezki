@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Receipt;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TransactionController extends Controller
 {
@@ -47,7 +49,19 @@ class TransactionController extends Controller
 
     public function store(Request $request)
     {
-        $data = Transaction::create($request->only((new Transaction())->getFillable()));
+        // create receipt
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->hasFile('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $receipts = Receipt::create($field_receipts);
+        $field_transactions = $request->only((new Transaction())->getFillable());
+        $field_transactions['id_user'] = $request->user()->id;
+        $field_transactions['id_receipt'] = $receipts->id;
+        $data = Transaction::create($field_transactions);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +93,22 @@ class TransactionController extends Controller
     public function update(Request $request, $id)
     {
         $data = Transaction::find($id);
-        $data->update($request->only((new Transaction())->getFillable()));
+        $field_receipts = $request->only((new Receipt())->getFillable());
+        if ($request->hasFile('file_receipt')) {
+            $file_receipt = $request->file('file_receipt');
+            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $receipt_url = Storage::url($path_of_file_receipt);
+            $field_receipts['receipt_url'] = $receipt_url;
+        }
+        $field_transactions = $request->only((new Transaction())->getFillable());
+        $field_transactions['id_campaign'] = null;
+        $field_transactions['id_user'] = null;
+        $field_transactions['id_receipt'] = null;
+        unset($field_transactions['id_campaign']);
+        unset($field_transactions['id_user']);
+        unset($field_transactions['id_receipt']);
+        $data->receipt->update($field_receipts);
+        $data->update($field_transactions);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',

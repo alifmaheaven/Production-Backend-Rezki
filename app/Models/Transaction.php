@@ -27,17 +27,17 @@ class Transaction extends Model
 
     public function campaign()
     {
-        return $this->belongsTo(Campaigns::class, 'id_campaign');
+        return $this->belongsTo(Campaign::class, 'id_campaign');
     }
 
     public function user()
     {
-        return $this->belongsTo(Users::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user');
     }
 
     public function receipt()
     {
-        return $this->belongsTo(Receipts::class, 'id_receipt');
+        return $this->belongsTo(Receipt::class, 'id_receipt');
     }
 
     public static function boot()
