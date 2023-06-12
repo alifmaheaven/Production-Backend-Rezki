@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('id_user')->nullable();
-            $table->uuid('id_campaign')->nullable();
             $table->uuid('id_receipt')->nullable();
             $table->bigInteger('amount')->nullable();
             $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'ACTIVE', 'ACHIEVED', 'PROCESSED', 'RUNNING', 'DONE'])->default('WAITING_VERIFICATION');
@@ -27,7 +26,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_campaign')->references('id')->on('campaigns');
             $table->foreign('id_receipt')->references('id')->on('receipts');
         });
     }

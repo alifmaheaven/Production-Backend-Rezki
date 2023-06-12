@@ -13,17 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_report_details', function (Blueprint $table) {
+        Schema::create('campaign_report_groups', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('amount')->nullable();
-            $table->text('description')->nullable();
-            $table->string('evidence')->nullable();
-            $table->string('type')->nullable();
+            $table->uuid('id_campaign_report')->nullable();
+            $table->uuid('id_campaign_report_detail')->nullable();
             $table->string('created_by')->default('system');
             $table->string('updated_by')->default('system');
             $table->boolean('is_deleted')->default(false);
             $table->integer('version')->default(1);
             $table->timestamps();
+
+            $table->foreign('id_campaign_report')->references('id')->on('campaign_reports');
+            $table->foreign('id_campaign_report_detail')->references('id')->on('campaign_report_details');
         });
     }
 
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campaign_report_details');
+        Schema::dropIfExists('campaign_report_groups');
     }
 };

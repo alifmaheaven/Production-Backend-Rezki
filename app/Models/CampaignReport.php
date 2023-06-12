@@ -15,6 +15,7 @@ class CampaignReport extends Model
     protected $table = 'campaign_reports';
     protected $fillable = [
         'id_campaign',
+        'id_payment',
         'document_name',
         'document_url',
         'is_exported',
@@ -24,6 +25,11 @@ class CampaignReport extends Model
     public function campaign()
     {
         return $this->belongsTo(Campaign::class, 'id_campaign');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'id_payment');
     }
 
     public static function boot()
