@@ -7,19 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Uuids;
 
-class CampaignReportDetail extends Model
+class campaign_report_group extends Model
 {
     use HasFactory;
     use Uuids;
 
-    protected $table = 'campaign_report_details';
+    protected $table = 'campaign_report_groups';
     protected $fillable = [
-        'amount',
-        'description',
-        'evidence',
-        'type',
+        'id_campaign_report',
+        'id_campaign_report_detail',
         'is_deleted',
     ];
+
+    public function campaign_report()
+    {
+        return $this->belongsTo(CampaignReport::class, 'id_campaign_report');
+    }
+
+    public function campaign_report_detail()
+    {
+        return $this->belongsTo(CampaignReportDetail::class, 'id_campaign_report_detail');
+    }
 
     public static function boot()
     {

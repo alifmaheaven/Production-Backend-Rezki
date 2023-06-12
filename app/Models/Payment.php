@@ -15,7 +15,6 @@ class Payment extends Model
     protected $table = 'payments';
     protected $fillable = [
         'id_user',
-        'id_campaign',
         'id_receipt',
         'amount',
         'status',
@@ -25,11 +24,6 @@ class Payment extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
-    }
-
-    public function campaign()
-    {
-        return $this->belongsTo(Campaign::class, 'id_campaign');
     }
 
     public function receipt()

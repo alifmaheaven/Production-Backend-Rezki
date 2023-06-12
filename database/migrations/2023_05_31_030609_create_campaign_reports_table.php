@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('campaign_reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('id_campaign')->nullable();
+            $table->uuid('id_payment')->nullable();
             $table->string('document_name')->nullable();
             $table->string('document_url')->nullable();
             $table->boolean('is_exported')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_campaign')->references('id')->on('campaigns');
+            $table->foreign('id_payment')->references('id')->on('payments');
         });
     }
 
