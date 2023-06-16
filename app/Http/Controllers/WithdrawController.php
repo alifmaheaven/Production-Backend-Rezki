@@ -47,7 +47,9 @@ class WithdrawController extends Controller
 
     public function store(Request $request)
     {
-        $data = Withdraw::create($request->only((new Withdraw())->getFillable()));
+        $field_withdraw = $request->only((new Withdraw())->getFillable());
+        $field_withdraw['id_user'] = $request->user()->id;
+        $data = Withdraw::create($field_withdraw);
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -79,7 +81,10 @@ class WithdrawController extends Controller
     public function update(Request $request, $id)
     {
         $data = Withdraw::find($id);
-        $data->update($request->only((new Withdraw())->getFillable()));
+        $field_withdraw = $request->only((new Withdraw())->getFillable());
+        $field_withdraw['id_user'] = null;
+        unset($field_withdraw['id_user']);
+        $data->update($field_withdraw);
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
