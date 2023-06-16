@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\CampaignReport;
+use App\Models\Payment;
+use App\Models\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +50,18 @@ class CampaignReportController extends Controller
 
     public function store(Request $request)
     {
+        // create receipts
+        $field_receipts = [];
+        $receipts = Receipt::create($field_receipts);
+
+        // create payments
+        $field_payment = [];
+        $field_payment['id_user'] = $request->user()->id;
+        $field_payment['id_receipt'] = $receipts->id;
+        $payments = Payment::create($field_payment);
+
         $field_campaign_reports = $request->only((new CampaignReport())->getFillable());
+        $field_campaign_reports['id_payment'] = $payments->id;
         if ($request->file('file_document')) {
             $file_document = $request->file('file_document');
             $original_name = $file_document->getClientOriginalName();
