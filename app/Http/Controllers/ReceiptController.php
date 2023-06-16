@@ -51,7 +51,10 @@ class ReceiptController extends Controller
         $field_receipts = $request->only((new Receipt())->getFillable());
         if ($request->file('file_receipt')) {
             $file_receipt = $request->file('file_receipt');
-            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $original_name = $file_receipt->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_receipt = $file_receipt->storeAs('public/receipt', $new_file_name);
             $receipt_url = Storage::url($path_of_file_receipt);
             $field_receipts['receipt_url'] = $receipt_url;
         }
@@ -90,7 +93,10 @@ class ReceiptController extends Controller
         $field_receipts = $request->only((new Receipt())->getFillable());
         if ($request->file('file_receipt')) {
             $file_receipt = $request->file('file_receipt');
-            $path_of_file_receipt = $file_receipt->store('public/receipt');
+            $original_name = $file_receipt->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_receipt = $file_receipt->storeAs('public/receipt', $new_file_name);
             $receipt_url = Storage::url($path_of_file_receipt);
             $field_receipts['receipt_url'] = $receipt_url;
         }
