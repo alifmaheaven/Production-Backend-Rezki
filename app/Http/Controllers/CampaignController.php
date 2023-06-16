@@ -60,7 +60,7 @@ class CampaignController extends Controller
             $new_file_name = $timestamp . '_' . $original_name;
             $path_of_file_prospektus = $file_prospektus->storeAs('public/prospektus', $new_file_name);
             $prospektus_url = Storage::url($path_of_file_prospektus);
-            $field_user_image['prospektus_url'] = $prospektus_url;
+            $field_campaign['prospektus_url'] = $prospektus_url;
         }
         $data = Campaign::create($field_campaign);
 
@@ -129,7 +129,7 @@ class CampaignController extends Controller
             $new_file_name = $timestamp . '_' . $original_name;
             $path_of_file_prospektus = $file_prospektus->storeAs('public/prospektus', $new_file_name);
             $prospektus_url = Storage::url($path_of_file_prospektus);
-            $field_user_image['prospektus_url'] = $prospektus_url;
+            $field_campaign['prospektus_url'] = $prospektus_url;
         }
         $data->update($field_campaign);
 
