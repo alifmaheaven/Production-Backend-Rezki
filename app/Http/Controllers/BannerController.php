@@ -51,7 +51,10 @@ class BannerController extends Controller
         $field_banners = $request->only((new Banner())->getFillable());
         if ($request->file('file_banner')) {
             $file_banner = $request->file('file_banner');
-            $path_of_file_banner = $file_banner->store('public/banner');
+            $original_name = $file_banner->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_banner = $file_banner->storeAs('public/banner', $new_file_name);
             $banner_url = Storage::url($path_of_file_banner);
             $field_banners['url'] = $banner_url;
         }
@@ -90,7 +93,10 @@ class BannerController extends Controller
         $field_banners = $request->only((new Banner())->getFillable());
         if ($request->file('file_banner')) {
             $file_banner = $request->file('file_banner');
-            $path_of_file_banner = $file_banner->store('public/banner');
+            $original_name = $file_banner->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_banner = $file_banner->storeAs('public/banner', $new_file_name);
             $banner_url = Storage::url($path_of_file_banner);
             $field_banners['url'] = $banner_url;
         }

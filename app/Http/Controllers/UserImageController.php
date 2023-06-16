@@ -51,19 +51,28 @@ class UserImageController extends Controller
         $field_user_image = $request->only((new UserImage)->getFillable());
         if ($request->file('file_id_card')) {
             $file_id_card = $request->file('file_id_card');
-            $path_of_file_id_card = $file_id_card->store('public/id_card');
+            $original_name = $file_id_card->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_id_card = $file_id_card->storeAs('public/id_card', $new_file_name);
             $id_card_url = Storage::url($path_of_file_id_card);
             $field_user_image['id_card_url'] = $id_card_url;
         }
         if ($request->file('file_id_card_with_face')) {
             $file_id_card_with_face = $request->file('file_id_card_with_face');
-            $path_of_file_id_card_with_face = $file_id_card_with_face->store('public/id_card_with_face');
+            $original_name = $file_id_card_with_face->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_id_card_with_face = $file_id_card_with_face->storeAs('public/id_card_with_face', $new_file_name);
             $id_card_with_face_url = Storage::url($path_of_file_id_card_with_face);
             $field_user_image['id_card_with_face_url'] = $id_card_with_face_url;
         }
         if ($request->file('file_selfie')) {
             $file_selfie = $request->file('file_selfie');
-            $path_of_file_selfie = $file_selfie->store('public/selfie');
+            $original_name = $file_selfie->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_selfie = $file_selfie->storeAs('public/selfie', $new_file_name);
             $selfie_url = Storage::url($path_of_file_selfie);
             $field_user_image['selfie_url'] = $selfie_url;
         }
@@ -102,19 +111,28 @@ class UserImageController extends Controller
         $field_user_image = $request->only((new UserImage)->getFillable());
         if ($request->file('file_id_card')) {
             $file_id_card = $request->file('file_id_card');
-            $path_of_file_id_card = $file_id_card->store('public/id_card');
+            $original_name = $file_id_card->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_id_card = $file_id_card->storeAs('public/id_card', $new_file_name);
             $id_card_url = Storage::url($path_of_file_id_card);
             $field_user_image['id_card_url'] = $id_card_url;
         }
         if ($request->file('file_id_card_with_face')) {
             $file_id_card_with_face = $request->file('file_id_card_with_face');
-            $path_of_file_id_card_with_face = $file_id_card_with_face->store('public/id_card_with_face');
+            $original_name = $file_id_card_with_face->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_id_card_with_face = $file_id_card_with_face->storeAs('public/id_card_with_face', $new_file_name);
             $id_card_with_face_url = Storage::url($path_of_file_id_card_with_face);
             $field_user_image['id_card_with_face_url'] = $id_card_with_face_url;
         }
         if ($request->file('file_selfie')) {
             $file_selfie = $request->file('file_selfie');
-            $path_of_file_selfie = $file_selfie->store('public/selfie');
+            $original_name = $file_selfie->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_selfie = $file_selfie->storeAs('public/selfie', $new_file_name);
             $selfie_url = Storage::url($path_of_file_selfie);
             $field_user_image['selfie_url'] = $selfie_url;
         }

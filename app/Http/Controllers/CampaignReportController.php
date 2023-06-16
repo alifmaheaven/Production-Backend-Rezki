@@ -51,7 +51,10 @@ class CampaignReportController extends Controller
         $field_campaign_reports = $request->only((new CampaignReport())->getFillable());
         if ($request->file('file_document')) {
             $file_document = $request->file('file_document');
-            $path_of_file_document = $file_document->store('public/document');
+            $original_name = $file_document->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_document = $file_document->storeAs('public/document', $new_file_name);
             $document_url = Storage::url($path_of_file_document);
             $field_campaign_reports['document_url'] = $document_url;
         }
@@ -90,7 +93,10 @@ class CampaignReportController extends Controller
         $field_campaign_reports = $request->only((new CampaignReport())->getFillable());
         if ($request->file('file_document')) {
             $file_document = $request->file('file_document');
-            $path_of_file_document = $file_document->store('public/document');
+            $original_name = $file_document->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_document = $file_document->storeAs('public/document', $new_file_name);
             $document_url = Storage::url($path_of_file_document);
             $field_campaign_reports['document_url'] = $document_url;
         }

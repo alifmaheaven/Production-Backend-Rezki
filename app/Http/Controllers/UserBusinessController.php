@@ -62,7 +62,10 @@ class UserBusinessController extends Controller
         $field_user_business = $request->only((new UserBusiness())->getFillable());
         if ($request->file('file_certificate')) {
             $file_certificate = $request->file('file_certificate');
-            $path_of_file_certificate = $file_certificate->store('public/certificate');
+            $original_name = $file_certificate->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_certificate = $file_certificate->storeAs('public/certificate', $new_file_name);
             $certificate_url = Storage::url($path_of_file_certificate);
             $field_user_business['certificate_url'] = $certificate_url;
         }
@@ -90,7 +93,10 @@ class UserBusinessController extends Controller
         $field_user_business = $request->only((new UserBusiness())->getFillable());
         if ($request->file('file_certificate')) {
             $file_certificate = $request->file('file_certificate');
-            $path_of_file_certificate = $file_certificate->store('public/certificate');
+            $original_name = $file_certificate->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_certificate = $file_certificate->storeAs('public/certificate', $new_file_name);
             $certificate_url = Storage::url($path_of_file_certificate);
             $field_user_business['certificate_url'] = $certificate_url;
         }

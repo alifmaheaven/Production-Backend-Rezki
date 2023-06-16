@@ -55,7 +55,10 @@ class CampaignController extends Controller
         $field_campaign['id_user'] = $request->user()->id;
         if ($request->file('file_prospektus')) {
             $file_prospektus = $request->file('file_prospektus');
-            $path_of_file_prospektus = $file_prospektus->store('public/prospektus');
+            $original_name = $file_prospektus->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_prospektus = $file_prospektus->storeAs('public/prospektus', $new_file_name);
             $prospektus_url = Storage::url($path_of_file_prospektus);
             $field_user_image['prospektus_url'] = $prospektus_url;
         }
@@ -68,7 +71,10 @@ class CampaignController extends Controller
             for ($i = 0; $i < count($array_banner_name); $i++) {
                 $banner_name = $array_banner_name[$i];
                 $file_banner = $array_file_banner[$i];
-                $path_of_file_banner = $file_banner->store('public/banner');
+                $original_name = $file_banner->getClientOriginalName();
+                $timestamp = now()->timestamp;
+                $new_file_name = $timestamp . '_' . $original_name;
+                $path_of_file_banner = $file_banner->storeAs('public/banner', $new_file_name);
                 $banner_url = Storage::url($path_of_file_banner);
                 $field_banner['name'] = $banner_name;
                 $field_banner['url'] = $banner_url;
@@ -118,7 +124,10 @@ class CampaignController extends Controller
         unset($field_campaign['id_user']);
         if ($request->file('file_prospektus')) {
             $file_prospektus = $request->file('file_prospektus');
-            $path_of_file_prospektus = $file_prospektus->store('public/prospektus');
+            $original_name = $file_prospektus->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $new_file_name = $timestamp . '_' . $original_name;
+            $path_of_file_prospektus = $file_prospektus->storeAs('public/prospektus', $new_file_name);
             $prospektus_url = Storage::url($path_of_file_prospektus);
             $field_user_image['prospektus_url'] = $prospektus_url;
         }
