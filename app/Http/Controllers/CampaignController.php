@@ -68,15 +68,15 @@ class CampaignController extends Controller
         if ($request->file('file_banner')) {
             $array_banner_name = $request->banner_name;
             $array_file_banner = $request->file('file_banner');
-            for ($i = 0; $i < count($array_banner_name); $i++) {
-                $banner_name = $array_banner_name[$i];
+            for ($i = 0; $i < count($array_file_banner); $i++) {
+                $banner_name = isset($array_banner_name[$i])? $array_banner_name[$i] : null;
                 $file_banner = $array_file_banner[$i];
                 $original_name = $file_banner->getClientOriginalName();
                 $timestamp = now()->timestamp;
                 $new_file_name = $timestamp . '_' . $original_name;
                 $path_of_file_banner = $file_banner->storeAs('public/banner', $new_file_name);
                 $banner_url = Storage::url($path_of_file_banner);
-                $field_banner['name'] = $banner_name;
+                $field_banner['name'] = $banner_name ? $banner_name : $original_name;
                 $field_banner['url'] = $banner_url;
                 $banner = Banner::create($field_banner);
 
