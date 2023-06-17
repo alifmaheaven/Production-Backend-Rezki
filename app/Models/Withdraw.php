@@ -18,6 +18,7 @@ class Withdraw extends Model
         'amount',
         'registrasion_fee',
         'service_fee',
+        'status',
         'is_deleted',
     ];
 

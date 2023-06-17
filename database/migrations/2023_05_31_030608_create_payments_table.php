@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('id_user')->nullable();
             $table->uuid('id_receipt')->nullable();
             $table->bigInteger('amount')->nullable();
-            $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'ACTIVE', 'ACHIEVED', 'PROCESSED', 'RUNNING', 'DONE'])->default('WAITING_VERIFICATION');
+            $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'APPROVED'])->default('WAITING_VERIFICATION');
             $table->string('created_by')->default('system');
             $table->string('updated_by')->default('system');
             $table->boolean('is_deleted')->default(false);
