@@ -65,6 +65,11 @@ class TransactionController extends Controller
         $field_transactions['id_user'] = $request->user()->id;
         $field_transactions['id_receipt'] = $receipts->id;
         $data = Transaction::create($field_transactions);
+
+        // add logical here
+        // TODO: add logical here
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data created successfully',
@@ -115,6 +120,11 @@ class TransactionController extends Controller
         unset($field_transactions['id_receipt']);
         $data->receipt->update($field_receipts);
         $data->update($field_transactions);
+
+        // add logical here
+        // TODO: add logical here
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data updated successfully',
