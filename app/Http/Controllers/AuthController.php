@@ -28,7 +28,10 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        $token = Auth::attempt($credentials);
+        // $expiredToken = $request->is_remember == true ? 7 * 24 * 60 : 1 * 60;
+        $expiredToken = 10080;
+
+        $token = Auth::setTTL($expiredToken)->attempt($credentials);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
