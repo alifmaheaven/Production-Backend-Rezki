@@ -17,6 +17,8 @@ class UserActive extends Model
         'email',
         'id_card',
         'tax_registration_number',
+        'user_bank',
+        'user_business',
         'is_deleted',
     ];
 
