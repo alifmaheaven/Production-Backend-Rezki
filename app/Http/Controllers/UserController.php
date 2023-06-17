@@ -42,6 +42,17 @@ class UserController extends Controller
         // Apply is_active condition and paginate
         $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
 
+        // map data add verfied value on data (non filter)
+        $data->map(function ($item) {
+            $item->is_verified = true;
+            if ($item->authorization_level == 1) {
+                $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 ? true : false;
+            } else if ($item->authorization_level == 2) {
+                $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 && $item->user_active->user_business == 1 ? true : false;
+            }
+            return $item;
+        });
+
         return response()->json([
             'status' => 'success',
             'data' => $data->items(),
