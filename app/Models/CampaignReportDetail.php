@@ -14,6 +14,7 @@ class CampaignReportDetail extends Model
 
     protected $table = 'campaign_report_details';
     protected $fillable = [
+        'date',
         'amount',
         'description',
         'evidence',

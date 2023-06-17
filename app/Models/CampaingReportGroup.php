@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Uuids;
 
-class campaign_report_group extends Model
+class CampaingReportGroup extends Model
 {
     use HasFactory;
     use Uuids;

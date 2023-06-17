@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('campaign_report_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->date('date')->nullable();
             $table->bigInteger('amount')->nullable();
             $table->text('description')->nullable();
             $table->string('evidence')->nullable();
