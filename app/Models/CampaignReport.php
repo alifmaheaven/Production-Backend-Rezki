@@ -32,6 +32,15 @@ class CampaignReport extends Model
         return $this->belongsTo(Payment::class, 'id_payment');
     }
 
+    public function campaign_report_details()
+    {
+        return $this->hasMany(CampaignReportGroup::class, 'id_campaign_report')
+        ->select('campaign_report_details.*', 'campaign_report_groups.id_campaign_report as id_campaign_report','campaign_report_groups.id as id_campaign_report_group')
+        ->join('campaign_report_details', 'campaign_report_details.id', '=', 'campaign_report_groups.id_campaign_report_detail');
+
+
+    }
+
     public static function boot()
     {
        parent::boot();

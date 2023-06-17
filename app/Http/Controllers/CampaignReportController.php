@@ -6,7 +6,7 @@ use App\Imports\CampaignReportDetailImport;
 use App\Imports\DataImport;
 use App\Models\CampaignReport;
 use App\Models\CampaignReportDetail;
-use App\Models\CampaingReportGroup;
+use App\Models\CampaignReportGroup;
 use App\Models\Payment;
 use App\Models\Receipt;
 use Illuminate\Http\Request;
@@ -141,7 +141,7 @@ class CampaignReportController extends Controller
                     $field_campaign_report_group = [];
                     $field_campaign_report_group['id_campaign_report'] = $data->id;
                     $field_campaign_report_group['id_campaign_report_detail'] = $campaign_report_detail->id;
-                    $campaign_report_group = CampaingReportGroup::create($field_campaign_report_group);
+                    $campaign_report_group = CampaignReportGroup::create($field_campaign_report_group);
                 // }
             }
         }
