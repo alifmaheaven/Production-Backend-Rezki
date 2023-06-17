@@ -228,6 +228,17 @@ Route::group(['prefix' => 'campaign-report'], function ($router) {
     });
 });
 
+// campaign_report_group
+Route::group(['prefix' => 'campaign-report-group'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignReportGroupController::class, 'index']);
+        $router->get('/{id}', [CampaignReportGroupController::class, 'show']);
+        $router->post('', [CampaignReportGroupController::class, 'store']);
+        $router->post('{id}', [CampaignReportGroupController::class, 'update']);
+        $router->delete('{id}', [CampaignReportGroupController::class, 'destroy']);
+    });
+});
+
 // campaign_report_detail
 Route::group(['prefix' => 'campaign-report-detail'], function ($router) {
     Route::group(['middleware' => 'auth:1,2,3'], function ($router) {

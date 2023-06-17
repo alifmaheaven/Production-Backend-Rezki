@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('amount')->nullable();;
             $table->bigInteger('registration_fee')->nullable();;
             $table->bigInteger('service_fee')->nullable();;
+            $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'APPROVED'])->default('WAITING_VERIFICATION');
             $table->string('created_by')->default('system');
             $table->string('updated_by')->default('system');
             $table->boolean('is_deleted')->default(false);
