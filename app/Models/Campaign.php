@@ -39,7 +39,7 @@ class Campaign extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function campaign_banners()
+    public function banners()
     {
         return $this->hasMany(CampaignBanner::class, 'id_campaign')->select('campaign_banners.*', 'banners.url', 'banners.name')
             ->join('banners', 'campaign_banners.id_banner', '=', 'banners.id')
