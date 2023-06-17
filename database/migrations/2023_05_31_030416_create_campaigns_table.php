@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('closing_date')->nullable();
             $table->float('return_investment_period')->nullable();;
-            $table->string('status')->nullable();
+            $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'ACTIVE', 'ACHIEVED', 'PROCESSED', 'RUNNING', 'DONE'])->default('WAITING_VERIFICATION');
             $table->string('prospektus_url')->nullable();
             $table->string('category')->nullable();
             $table->boolean('is_approved')->nullable();

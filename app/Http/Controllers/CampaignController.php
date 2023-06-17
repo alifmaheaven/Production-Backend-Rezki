@@ -69,7 +69,7 @@ class CampaignController extends Controller
             $array_banner_name = $request->banner_name;
             $array_file_banner = $request->file('file_banner');
             for ($i = 0; $i < count($array_file_banner); $i++) {
-                $banner_name = isset($array_banner_name[$i])? $array_banner_name[$i] : null;
+                $banner_name = isset($array_banner_name[$i]) ? $array_banner_name[$i] : null;
                 $file_banner = $array_file_banner[$i];
                 $original_name = $file_banner->getClientOriginalName();
                 $timestamp = now()->timestamp;
@@ -88,6 +88,9 @@ class CampaignController extends Controller
                 $campaign_banner = CampaignBanner::create($field_campaign_banner);
             }
         }
+
+        // add logical here
+        // TODO: add logical here
 
         return response()->json([
             'status' => 'success',
@@ -132,6 +135,9 @@ class CampaignController extends Controller
             $field_campaign['prospektus_url'] = $prospektus_url;
         }
         $data->update($field_campaign);
+
+        // add logical here
+        // TODO: add logical here
 
         return response()->json([
             'status' => 'success',
