@@ -6,6 +6,7 @@ use App\Http\Controllers\CampaignBannerController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CampaignReportController;
 use App\Http\Controllers\CampaignReportDetailController;
+use App\Http\Controllers\CampaignReportGroupController;
 use App\Http\Controllers\UserActiveController;
 use App\Http\Controllers\UserBankController;
 use App\Http\Controllers\FileController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\UserHeirController;
 use App\Http\Controllers\UserImageController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -89,14 +91,24 @@ Route::group(['prefix' => 'upload'], function ($router) {
     });
 });
 
-// user
-Route::group(['prefix' => 'user'], function ($router) {
+// users
+Route::group(['prefix' => 'users'], function ($router) {
     Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
         $router->get('', [UserController::class, 'index']);
         $router->get('/{id}', [UserController::class, 'show']);
         $router->post('', [UserController::class, 'store']);
         $router->post('{id}', [UserController::class, 'update']);
         $router->delete('{id}', [UserController::class, 'destroy']);
+    });
+});
+
+// user
+Route::group(['prefix' => 'user'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [UserController::class, 'show_user_by_token']);
+        $router->post('', [UserController::class, 'update_user_by_token']);
+        $router->post('change-password', [UserController::class, 'change_password_user_by_token']);
+        $router->post('logout', [AuthController::class, 'logout']);
     });
 });
 
