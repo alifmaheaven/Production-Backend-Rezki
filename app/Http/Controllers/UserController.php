@@ -159,7 +159,7 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Data created successfully',
             'data' => $data,
-            'authorisation' => [
+            'authorization' => [
                 "token" => $token,
                 "type" => "bearer"
             ],
