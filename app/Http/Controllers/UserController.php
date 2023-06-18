@@ -31,31 +31,35 @@ class UserController extends Controller
             }
         }
 
-        // Include related data
-        if ($request->query('include')) {
-            $includes = $request->query('include');
-            foreach ($includes as $include) {
-                $data = $data->with($include);
-            }
-        }
-
         // Apply is_active condition and paginate
         $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
 
         // map data add verfied value on data (non filter)
-        $data->map(function ($item) {
+        $data_with_verified = $data->map(function ($item) {
             $item->is_verified = true;
             if ($item->authorization_level == 1) {
                 $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 ? true : false;
             } else if ($item->authorization_level == 2) {
                 $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 && $item->user_active->user_business == 1 ? true : false;
             }
+
+            // Remove the user_active property
+            unset($item->user_active);
+
             return $item;
         });
 
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data_with_verified = $data_with_verified->load($include);
+            }
+        }
+
         return response()->json([
             'status' => 'success',
-            'data' => $data->items(),
+            'data' => $data_with_verified,
             'meta' => [
                 'current_page' => $data->currentPage(),
                 'last_page' => $data->lastPage(),
