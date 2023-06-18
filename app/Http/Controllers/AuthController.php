@@ -40,6 +40,8 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        // Add verified value to the user
+        UserController::addVerifiedValueToTheData($user);
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
