@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('sukuk')->nullable();
             $table->bigInteger('service_fee')->nullable();
             $table->enum('status', ['WAITING_VERIFICATION', 'REJECTED', 'APPROVED'])->default('WAITING_VERIFICATION');
-            $table->bigInteger('profit')->nullable();
             $table->string('created_by')->default('system');
             $table->string('updated_by')->default('system');
             $table->boolean('is_deleted')->default(false);
