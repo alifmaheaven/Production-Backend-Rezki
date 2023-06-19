@@ -31,31 +31,27 @@ class UserController extends Controller
             }
         }
 
+        // Apply is_active condition and paginate
+        $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
+
+        // map data add verified value on data (non filter)
+        $data_with_verified = $data->map(function ($item) {
+            $this->addVerifiedValueToTheData($item);
+
+            return $item;
+        });
+
         // Include related data
         if ($request->query('include')) {
             $includes = $request->query('include');
             foreach ($includes as $include) {
-                $data = $data->with($include);
+                $data_with_verified = $data_with_verified->load($include);
             }
         }
 
-        // Apply is_active condition and paginate
-        $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
-
-        // map data add verfied value on data (non filter)
-        $data->map(function ($item) {
-            $item->is_verified = true;
-            if ($item->authorization_level == 1) {
-                $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 ? true : false;
-            } else if ($item->authorization_level == 2) {
-                $item->is_verified = $item->user_active->phone_number == 1 && $item->user_active->email == 1 && $item->user_active->id_card == 1 && $item->user_active->tax_registration_number == 1 && $item->user_active->user_bank == 1 && $item->user_active->user_business == 1 ? true : false;
-            }
-            return $item;
-        });
-
         return response()->json([
             'status' => 'success',
-            'data' => $data->items(),
+            'data' => $data_with_verified,
             'meta' => [
                 'current_page' => $data->currentPage(),
                 'last_page' => $data->lastPage(),
@@ -154,6 +150,7 @@ class UserController extends Controller
         $field_user['id_user_heir'] = $user_heir->id;
         $field_user['id_user_image'] = $user_image->id;
         $data = User::create($field_user);
+        $data['is_verified'] = false;
 
         $credentials = $request->only('email', 'password');
         $token = Auth::attempt($credentials);
@@ -162,7 +159,7 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Data created successfully',
             'data' => $data,
-            'authorisation' => [
+            'authorization' => [
                 "token" => $token,
                 "type" => "bearer"
             ],
@@ -173,15 +170,19 @@ class UserController extends Controller
     public function show(Request $request, $id)
     {
         $data = new User();
+
+        $data = $data->find($id);
+
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         // Include related data
         if ($request->query('include')) {
             $includes = $request->query('include');
             foreach ($includes as $include) {
-                $data = $data->with($include);
+                $data = $data->load($include);
             }
         }
-
-        $data = $data->find($id);
 
         return response()->json([
             'status' => 'success',
@@ -271,6 +272,9 @@ class UserController extends Controller
         }
         $data->user_image->update($field_user_image);
 
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data update successfully',
@@ -310,6 +314,9 @@ class UserController extends Controller
         $field_user['password'] = bcrypt($request->password);
         $data->update($field_user);
 
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data update successfully',
@@ -337,16 +344,21 @@ class UserController extends Controller
     // fitur custom
     public function show_user_by_token(Request $request)
     {
+
         $data = new User();
+
+        $data = $data->find($request->user()->id);
+
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         // Include related data
         if ($request->query('include')) {
             $includes = $request->query('include');
             foreach ($includes as $include) {
-                $data = $data->with($include);
+                $data = $data->load($include);
             }
         }
-
-        $data = $data->find($request->user()->id);
 
         return response()->json([
             'status' => 'success',
@@ -436,6 +448,9 @@ class UserController extends Controller
         }
         $data->user_image->update($field_user_image);
 
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data update successfully',
@@ -475,11 +490,31 @@ class UserController extends Controller
         $field_user['password'] = bcrypt($request->password);
         $data->update($field_user);
 
+        // Add verified value to the data
+        $this->addVerifiedValueToTheData($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data update successfully',
             'data' => $data,
             'server_time' => (int) round(microtime(true) * 1000),
         ]);
+    }
+
+    /**
+     * @param $data
+     * @return void
+     */
+    public static function addVerifiedValueToTheData($data): void
+    {
+        $data->is_verified = true;
+        if ($data->authorization_level == 1) {
+            $data->is_verified = $data->user_active->phone_number == 1 && $data->user_active->email == 1 && $data->user_active->id_card == 1 && $data->user_active->tax_registration_number == 1 && $data->user_active->user_bank == 1;
+        } else if ($data->authorization_level == 2) {
+            $data->is_verified = $data->user_active->phone_number == 1 && $data->user_active->email == 1 && $data->user_active->id_card == 1 && $data->user_active->tax_registration_number == 1 && $data->user_active->user_bank == 1 && $data->user_active->user_business == 1;
+        }
+
+        // Remove the user_active property
+        unset($data->user_active);
     }
 }

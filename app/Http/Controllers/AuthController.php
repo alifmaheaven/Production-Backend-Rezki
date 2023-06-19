@@ -23,6 +23,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -36,17 +37,21 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 401);
         }
 
         $user = Auth::user();
+        // Add verified value to the user
+        UserController::addVerifiedValueToTheData($user);
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
-                'authorisation' => [
+                'authorization' => [
                     'token' => $token,
                     'type' => 'bearer',
-                ]
+                ],
+            'server_time' => (int) round(microtime(true) * 1000),
             ]);
 
     }
@@ -57,6 +62,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -65,10 +71,11 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'user' => Auth::user(),
-            'authorisation' => [
+            'authorization' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',
-            ]
+            ],
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
