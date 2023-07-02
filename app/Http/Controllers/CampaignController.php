@@ -123,6 +123,7 @@ class CampaignController extends Controller
     public function update(Request $request, $id)
     {
         $data = Campaign::find($id);
+        $field_campaign = $request->only((new Campaign())->getFillable());
         $field_campaign['id_user'] = null;
         unset($field_campaign['id_user']);
         if ($request->file('file_prospektus')) {
